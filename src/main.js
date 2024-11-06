@@ -15,12 +15,15 @@ import {
 
 import {
   faCheckDouble, faMapMarkerAlt, faCircle, faSearch, faArrowRight, 
-   faAngleRight, faAngleLeft, faSignOutAlt
+   faAngleRight, faAngleLeft, faSignOutAlt,
+   faArrowLeft,
+   faCamera,
+   faCheck
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faPlusSquare,faHeart,faCheckDouble,faClock,faMapMarkerAlt,faUser,faCircle, faSearch, faArrowRight,
-   faEyeSlash, faSignOutAlt,faEye,faAngleRight,faAngleLeft
+   faEyeSlash, faSignOutAlt,faEye,faAngleRight,faAngleLeft,faArrowLeft, faCamera, faCheck
 )
 
 const app = createApp(App).component('font-awesome-icon', FontAwesomeIcon)

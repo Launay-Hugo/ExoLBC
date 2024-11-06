@@ -39,7 +39,7 @@ queries.page= 1
     <div class="container">
       <div class="topBloc">
         <RouterLink :to="{ name: 'home' }">
-          <img src="../assets/logo.svg" alt="" />
+          <img src="../assets/img/logo.svg" alt="" />
         </RouterLink>
 
         <div class="middlePart">

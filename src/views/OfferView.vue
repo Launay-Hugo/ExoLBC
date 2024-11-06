@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
-import { RouterLink } from 'vue-router'
 import { useCycleList } from '@vueuse/core'
 import axios from 'axios'
+import { RouterLink } from 'vue-router'
 
-
+import { formatPrice } from '../utils/formatPrice'
 
 const props = defineProps({
   id: {
@@ -13,23 +13,6 @@ const props = defineProps({
 })
 
 const offerInfos = ref({})
-
-const formatPrice = (price) => {
-  if (price >= 1000) {
-    const priceStr = price.toString()
-    let newPrice = []
-    for (let i = priceStr.length - 1; i >= 0; i--) {
-      if (i === priceStr.length - 4 || i === priceStr.length - 7) {
-        newPrice.push(priceStr[i] + ' ')
-      } else {
-        newPrice.push(priceStr[i])
-      }
-    }
-    return newPrice.reverse().join('')
-  } else {
-    return price
-  }
-}
 
 const cyclelist = computed(() => {
   const { state, next, prev } = useCycleList(offerInfos.value.attributes.pictures.data)
@@ -43,7 +26,7 @@ onMounted(async () => {
       `https://site--strapileboncoin--2m8zk47gvydr.code.run/api/offers/${props.id}?populate[0]=pictures&populate[1]=owner.avatar`
     )
 
-    console.log('OfferView - data >>>', data.data)
+    //console.log('OfferView - data >>>', data.data)
 
     offerInfos.value = data.data
   } catch (error) {
@@ -51,18 +34,26 @@ onMounted(async () => {
   }
 })
 
+
 const formatDate = computed(() => {
- const creationDateUTCFormat = offerInfos.value.attributes.updatedAt
- const dateSimpleFormat = creationDateUTCFormat.split('T')[0]
- const dateSimpleFormatArray = dateSimpleFormat.split('-')
- const dateCorrectOrderArray = dateSimpleFormatArray.reverse()
- const stringDate = dateCorrectOrderArray.join('/')
- return stringDate
+ 
+  return offerInfos.value.attributes.updatedAt?.split('T')[0].split('-').reverse().join('/')
+  // -- Version non chaînée pour comprendre le déroulé
+  // const creationDateUTCFormat = offerInfos.value.attributes.updatedAt
+  // console.log('OfferCard - 1 - creationDateUTCFormat>>>', creationDateUTCFormat)
+  // const dateSimpleFormat = creationDateUTCFormat.split('T')[0]
+  // console.log('OfferCard - 2 - dateSimpleFormat>>>', dateSimpleFormat)
+  // const dateSimpleFormatArray = dateSimpleFormat.split('-')
+  // console.log('OfferCard - 3 - dateSimpleFormatArray>>>', dateSimpleFormatArray)
+  // const dateCorrectOrderArray = dateSimpleFormatArray.reverse()
+  // console.log('OfferCard - 4 - dateCorrectOrderArray>>>', dateCorrectOrderArray)
+  // const stringDate = dateCorrectOrderArray.join('/')
+  // console.log('OfferCard - 5 - stringDate>>>', stringDate)
+  // return stringDate
 })
 
 const formatedPrice = computed(() => {
   const price = offerInfos.value.attributes.price
-
   return formatPrice(price)
 })
 </script>
@@ -82,6 +73,8 @@ const formatedPrice = computed(() => {
             />
 
             <img :src="cyclelist.state.value.attributes.url" :alt="offerInfos.attributes.title" />
+
+           
             <font-awesome-icon
               :icon="['fas', 'angle-right']"
               @click="cyclelist.next()"
@@ -99,7 +92,7 @@ const formatedPrice = computed(() => {
           <p>{{ offerInfos.attributes.description }}</p>
 
           <p class="city">
-            <font-awesome-icon :icon="['fas', 'location-dot']" /> Agon-Coutainville (50230)
+            <font-awesome-icon :icon="['fas', 'map-marker-alt']" /> Agon-Coutainville (50230)
           </p>
         </div>
 
@@ -121,9 +114,7 @@ const formatedPrice = computed(() => {
           </div>
 
           <div>
-            <RouterLink :to="{ name: 'payment', params: { id: offerInfos.id } }"
-              >Acheter</RouterLink
-            >
+            <button><RouterLink :to="{name: 'payment', params :{id:offerInfos.id}}">Acheter</RouterLink></button>
             <button>Message</button>
           </div>
         </div>
@@ -141,7 +132,6 @@ main .container {
   display: flex;
   gap: 20px;
 }
-
 .firstCol {
   width: 67%;
 }
@@ -186,7 +176,6 @@ h2 {
 .firstCol svg:last-child {
   right: 10px;
 }
-
 .secondCol {
   width: 33%;
   height: 375px;
@@ -244,18 +233,15 @@ svg {
   flex-direction: column;
   gap: 10px;
 }
-button,
-a {
+button {
   border: none;
   color: white;
   padding: 15px;
   border-radius: 15px;
   font-weight: bold;
-  font-size: inherit;
 }
-a {
+button:first-child {
   background-color: var(--orange);
-  text-align: center;
 }
 button:last-child {
   background-color: var(--blue-dark);

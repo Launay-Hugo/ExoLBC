@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
-
+import { formatPrice } from '../utils/formatPrice'
 
 const props = defineProps({
   offerInfos: {
@@ -13,25 +13,6 @@ const props = defineProps({
     required: true
   }
 })
-
-const formatPrice = (price) => {
-  if (price >= 1000) {
-    const priceStr = price.toString()
-
-    let newPrice = []
-
-    for (let i = priceStr.length - 1; i >= 0; i--) {
-      if (i === priceStr.length - 4 || i === priceStr.length - 7) {
-        newPrice.push(priceStr[i] + ' ')
-      } else {
-        newPrice.push(priceStr[i])
-      }
-    }
-    return newPrice.reverse().join('')
-  } else {
-    return price
-  }
-}
 
 const formatDate = computed(() => {
   return props.offerInfos.updatedAt.split('T')[0].split('-').reverse().join('/')

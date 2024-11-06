@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, useRouter}  from 'vue-router';
+import { RouterLink, useRouter, useRoute}  from 'vue-router';
 import {  ref , inject} from 'vue';
 import axios from 'axios';
 
@@ -13,6 +13,7 @@ const GlobalStore = inject ('GlobalStore')
 const displayPassword = ref (false)
 
 const router = useRouter()
+const route = useRoute()
 
 const handleSubmit= async ()=>{
     console.log({
@@ -27,11 +28,11 @@ const handleSubmit= async ()=>{
              password:password.value});
             
         console.log(data);
-       GlobalStore.changeUserInfos({username: data.user.username, token: data.jwt})
+       GlobalStore.changeUserInfos({username: data.user.username, token: data.jwt, id: data.user.id})
 
-                $cookies.set('userInfos',{username: data.user.username, token: data.jwt})
+                $cookies.set('userInfos',{username: data.user.username, token: data.jwt, id: data.user.id})
 
-       router.push({name: 'home'})
+       router.push({path: route.query.redirect || '/'})
         
     } catch (error) {
         console.log(error);
@@ -75,7 +76,7 @@ const handleSubmit= async ()=>{
 </template>
 <style scoped>
 main {
-  background-image: url('../assets/illustration.png');
+  background-image: url('../assets/img/illustration.png');
   background-size: contain;
   background-position: bottom;
   background-repeat: no-repeat;
