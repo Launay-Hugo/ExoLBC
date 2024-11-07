@@ -32,6 +32,14 @@ queries.page= 1
 
 }
 
+const changeValue =(event)=>{
+if(event.target.value ===''){
+  const queries={...route.query}
+  delete queries.title
+  router.push({name:'home', query:queries})
+}
+}
+
 </script>
 
 <template>
@@ -46,7 +54,8 @@ queries.page= 1
           <BtnPublishOffer />
 
           <form @click.prevent="handleSearch">
-            <input type="text" name="search" id="search" placeholder="Rechercher sur leboncoin" v-model="search" />
+            <input type="text" name="search" id="search" placeholder="Rechercher sur leboncoin" 
+            v-model="search" @input="changeValue"/>
             <button>
             <font-awesome-icon :icon="['fas', 'search']" />
             </button>
@@ -56,11 +65,13 @@ queries.page= 1
           <RouterLink :to="{name: 'login'}" v-if="!GlobalStore.userInfos.value">
           <font-awesome-icon :icon="['far', 'user']" />
           <p>Se connecter</p>
-          </RouterLink>
+          </RouterLink >
           <div v-else class="disconnect">
             <div>
+         <RouterLink :to="{name:'profile'}">
             <font-awesome-icon :icon="['far', 'user']" />
             <p>{{GlobalStore.userInfos.value.username}}</p>
+          </RouterLink>
             </div>
           <font-awesome-icon :icon="['fas', 'sign-out-alt']" @click="disconnnectUser"/>
           </div>
